@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- This tells browsers not to scale to the viewport automatically. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simon</title>
+    <link rel="icon" href="favicon.ico" />
+  </head>
+
+  <body>
+    <header>
+      <h1>Simon<sup>&reg;</sup></h1>
+
+      <!-- navigation elements -->
+      <nav>
+        <menu>
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="play.html">PLAY</a></li>
+          <li><a href="scores.html">SCORES</a></li>
+          <li><a href="about.html">ABOUT</a></li>
+        </menu>
+      </nav>
+
+      <hr />
+    </header>
+
+    <!-- different from other pages -->
+    <main>
+      <div class="players">
+        Player:
+        <span class="player-name">Mystery Player</span>
+      </div>
+
+      <!-- more old style HTML formatting -->
+      <br />
+
+      <div>
+        <label for="count">Score</label>
+        <input type="text" id="count" value="--" readonly />
+      </div>
+
+      <br />
+
+      <div>
+        <table>
+          <tr>
+            <!-- green button -->
+            <td>
+              <button>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 100 100"
+                  height="100"
+                  width="100"
+                >
+                  <!-- SVG 
+                            M move <to x,y>
+                            Q quadratic curve <control point x,y> <to x,y>
+                            -->
+                  <path d="M 95,5 95,95 5,95 Q 5,5 95,5" fill="green" />
+                </svg>
+              </button>
+            </td>
+            <!-- red button -->
+            <td>
+              <button>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 100 100"
+                  height="100"
+                  width="100"
+                >
+                  <path d="M 5,5 5,95 95,95 Q 95,5 5,5" fill="red" />
+                </svg>
+              </button>
+            </td>
+            <!-- yellow button -->
+            <td>
+              <button>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 100 100"
+                  height="100"
+                  width="100"
+                >
+                  <path d="M 95,5 5,5 5,95 Q 95,95 95,5" fill="yellow" />
+                </svg>
+              </button>
+            </td>
+            <!-- blue button -->
+            <td>
+              <button>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 100 100"
+                  height="100"
+                  width="100"
+                >
+                  <path d="M 5,5 95,5 95,95 Q 5,95 5,5" fill="blue" />
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </main>
+
+    <!-- same on all the pages -->
+    <footer>
+      <hr />
+      <span class="text-reset">Author name(s)</span>
+      <br />
+      <a href="https://github.com/rileywoolf/simon.git">GitHub</a>
+    </footer>
+  </body>
+</html>
