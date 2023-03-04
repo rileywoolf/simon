@@ -7,6 +7,9 @@
     <title>Simon</title>
     <link rel="icon" href="favicon.ico" />
 
+    <!-- connect the html to the js file -->
+    <script src="login.js"></script>
+
     <link rel="stylesheet" href="main.css" />
     <!-- Include bootstrap CSS framework -->
     <link
@@ -44,7 +47,9 @@
         <p>Login to play!</p>
         <form method="get" action="play.html">
           <input type="text" id="name" placeholder="your name here" />
-          <button type="submit" class="btn btn-primary">LOGIN</button>
+          <button type="submit" class="btn btn-primary" onclick="login()">
+            LOGIN
+          </button>
         </form>
       </div>
     </main>
