@@ -59,23 +59,134 @@ class Game {
     playerNameEl.textContent = this.getPlayerName();
   }
 
-  async pressButton(button) {}
+  async pressButton(button) {
+    if (this.allowPlayer) {
+      this.allowPlayer = false;
+      await this.buttons.get(button.id).press(1.0);
 
-  async reset() {}
+      // See if the user selects the correct button.
+      if (this.sequence[this.playerPlaybackPos].el.id === button.id) {
+        this.playerPlaybackPos++;
+        if (this.playerPlaybackPos === this.sequence.length) {
+          this.playerPlaybackPos = 0;
+          this.addButton();
+          this.updateScore(this.sequence.length - 1);
+          await this.playSequence();
+        }
+        this.allowPlayer = true;
+      } else {
+        // If they didn't, save their score, play the mistake sound, and have the buttons do their little dance.
+        this.saveScore(this.sequence.length - 1);
+        this.mistakeSound.play();
+        await this.buttonDance(2);
+      }
+    }
+  }
 
-  getPlayerName() {}
+  // Resets all of the data for a new game, plays button dance, adds the first button in the sequence and shows it to the user.
+  async reset() {
+    this.allowPlayer = false;
+    this.playerPlaybackPos = 0;
+    this.sequence = [];
+    this.updateScore("--");
+    await this.buttonDance(1);
+    this.addButton();
+    await this.playSequence();
+    this.allowPlayer = true;
+  }
 
-  async playSequence() {}
+  // Gets the player name from local storage.
+  getPlayerName() {
+    return localStorage.getItem("userName") ?? "Mystery Player";
+  }
 
-  addButton() {}
+  // Shows the player the sequence of buttons they need to press.
+  async playSequence() {
+    await delay(500);
+    for (const btn of this.sequence) {
+      await btn.press(1.0);
+      await delay(100);
+    }
+  }
 
-  updateScore(score) {}
+  // Adds a random button to the sequence the player needs to copy.
+  addButton() {
+    const btn = this.getRandomButton();
+    this.sequence.push(btn);
+  }
 
-  async buttonDance(laps = 1) {}
+  // Modifies the score displayed on the page.
+  updateScore(score) {
+    const scoreEl = document.querySelector("#score");
+    scoreEl.textContent = score;
+  }
 
-  getRandomButton() {}
+  // Goes through the buttons and lights them up. Loops laps times.
+  async buttonDance(laps = 1) {
+    for (let step = 0; step < laps; step++) {
+      for (const btn of this.buttons.values()) {
+        await btn.press(0.0);
+      }
+    }
+  }
 
-  saveScore(score) {}
+  // Randomly chooses a button from the list of buttons.
+  getRandomButton() {
+    let buttons = Array.from(this.buttons.values());
+    return buttons[Math.floor(Math.random() * this.buttons.size)];
+  }
 
-  updateScores(userName, score, scores) {}
+  // Save the final score of the game to the scores list.
+  saveScore(score) {
+    const userName = this.getPlayerName();
+    let scores = [];
+    const scoresText = localStorage.getItem("scores");
+    // If there are already scores saved, parse them.
+    if (scoresText) {
+      scores = JSON.parse(scoresText);
+    }
+    score = this.updateScores(userName, score, scores);
+    // After adding the new score to the list, save the updated list in local storage.
+    localStorage.setItem("scores", JSON.stringify(scores));
+  }
+
+  updateScores(userName, score, scores) {
+    const date = new Date().toLocaleDateString();
+    const newScore = { name: userName, score: score, date: date };
+
+    // Iterate through the list and find where the new score fits.
+    let found = false;
+    for (const [i, prevScore] of scores.entries()) {
+      if (score > prevScore.score) {
+        scores.splice(i, 0, newScore);
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+      scores.push(newScore);
+    }
+
+    // If the list is longer than 10 scores, truncate it to the top 10.
+    if (scores.length > 10) {
+      scores.length = 10;
+    }
+
+    return scores;
+  }
+}
+
+const game = new Game();
+
+function delay(milliseconds) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, milliseconds);
+  });
+}
+
+function loadSound(filename) {
+  return new Audio("assets/" + filename);
 }
