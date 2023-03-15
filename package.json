@@ -1,0 +1,23 @@
+{
+  "name": "simon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "login.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rileywoolf/simon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rileywoolf/simon/issues"
+  },
+  "homepage": "https://github.com/rileywoolf/simon#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
