@@ -1,9 +1,24 @@
 // Retrieves the high scores from local storage so that they can be displayed.
 
 async function loadScores() {
-  const response = await fetch("/api/scores");
-  const scores = await response.json();
+  let scores = [];
+  try {
+    const response = await fetch("/api/scores");
+    scores = await response.json();
 
+    // Put scores in local storage in case we go offline.
+    localStorage.setItem("scores", JSON.stringify(scores));
+  } catch {
+    const scoresText = localStorage.getItem("scores");
+    if (scoresText) {
+      scores = JSON.parse(scoresText);
+    }
+  }
+
+  displayScores(scores);
+}
+
+function displayScores(scores) {
   const tableBodyEl = document.querySelector("#scores");
 
   if (scores.length) {

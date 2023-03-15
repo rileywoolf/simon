@@ -137,27 +137,36 @@ class Game {
   }
 
   // Save the final score of the game to the scores list.
-  saveScore(score) {
+  async saveScore(score) {
     const userName = this.getPlayerName();
+    const date = new Date().toLocaleDateString();
+    const newScore = { name: userName, score: score, date: date };
+
+    try {
+      const response = await fetch("/api/score", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(newScore),
+      });
+
+      const scores = await response.json();
+      localStorage.setItem("scores", JSON.stringify(scores));
+    } catch {
+      this.updateScoresLocal(newScore);
+    }
+  }
+
+  updateScoresLocal(newScore) {
     let scores = [];
     const scoresText = localStorage.getItem("scores");
     // If there are already scores saved, parse them.
     if (scoresText) {
       scores = JSON.parse(scoresText);
     }
-    score = this.updateScores(userName, score, scores);
-    // After adding the new score to the list, save the updated list in local storage.
-    localStorage.setItem("scores", JSON.stringify(scores));
-  }
 
-  updateScores(userName, score, scores) {
-    const date = new Date().toLocaleDateString();
-    const newScore = { name: userName, score: score, date: date };
-
-    // Iterate through the list and find where the new score fits.
     let found = false;
     for (const [i, prevScore] of scores.entries()) {
-      if (score > prevScore.score) {
+      if (newScore > prevScore.score) {
         scores.splice(i, 0, newScore);
         found = true;
         break;
@@ -168,12 +177,12 @@ class Game {
       scores.push(newScore);
     }
 
-    // If the list is longer than 10 scores, truncate it to the top 10.
     if (scores.length > 10) {
       scores.length = 10;
     }
 
-    return scores;
+    // After adding the new score to the list, save the updated list in local storage.
+    localStorage.setItem("scores", JSON.stringify(scores));
   }
 }
 
