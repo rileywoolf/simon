@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/rileywoolf/simon#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "mongodb": "^5.1.0"
   }
 }
